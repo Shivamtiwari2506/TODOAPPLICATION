@@ -4,13 +4,14 @@ import TaskCard from "./TaskCard";
 import AddTaskModal from "./AddTaskModal";
 
 
-const TaskColumn = ({ title, tasks, status, handleSubmit, onRemoveTask }) => {
+const TaskColumn = ({ title, tasks, status, handleSubmit, onRemoveTask, editTask, deleteTask, boardName }) => {
   const [showModal, setShowModal] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-
+  const [editingData, setEditingData] = useState(null);
   const handleEdit = (task) => {
     setShowModal(true);
     setIsEditing(true);
+    setEditingData(task);
   };
 
   return (
@@ -26,7 +27,10 @@ const TaskColumn = ({ title, tasks, status, handleSubmit, onRemoveTask }) => {
       </div>
 
       {showModal && (
-        <AddTaskModal openModal={showModal} setShowModal={setShowModal} handleSubmit={handleSubmit} isEditing={isEditing}/>
+        <AddTaskModal openModal={showModal} setShowModal={setShowModal} handleSubmit={handleSubmit} isEditing={isEditing}
+        editTask={editTask}
+        editingData={editingData}
+        />
       )}
 
       <div className="flex-1 space-y-3 overflow-y-scroll h-screen">
@@ -35,10 +39,11 @@ const TaskColumn = ({ title, tasks, status, handleSubmit, onRemoveTask }) => {
         )}
         {tasks.map((task) => (
           <TaskCard
-            key={task.id}
+            key={task._id}
             task={task}
-            onDelete={() => onRemoveTask(status, task.id)}
+            onDelete={() => deleteTask(task._id)}
             onEdit={handleEdit}
+            boardName={boardName}
           />
         ))}
       </div>

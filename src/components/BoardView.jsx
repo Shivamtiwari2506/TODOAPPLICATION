@@ -2,14 +2,7 @@ import React, { useEffect, useState } from "react";
 import TaskColumn from "./TaskColumn";
 import moment from "moment";
 
-const BoardView = ({ boardName, createdAt, tasks, handleSubmit }) => {
-
-  const removeTask = (status, id) => {
-    setTasks((prev) => ({
-      ...prev,
-      [status]: prev[status].filter((t) => t._id !== id),
-    }));
-  };
+const BoardView = ({ boardName, createdAt, tasks, handleSubmit, editTask,deleteTask }) => {
 
   return (
     <div>
@@ -29,7 +22,9 @@ const BoardView = ({ boardName, createdAt, tasks, handleSubmit }) => {
           tasks={tasks?.todo}
           status="todo"
           handleSubmit={handleSubmit}
-          onRemoveTask={removeTask}
+          deleteTask={deleteTask}
+          editTask={editTask}
+          boardName={boardName}
         />
 
         <TaskColumn
@@ -37,7 +32,9 @@ const BoardView = ({ boardName, createdAt, tasks, handleSubmit }) => {
           tasks={tasks?.inprogress}
           status="inprogress"
           handleSubmit={handleSubmit}
-          onRemoveTask={removeTask}
+          deleteTask={deleteTask}
+          editTask={editTask}
+          boardName={boardName}
         />
 
         <TaskColumn
@@ -45,7 +42,9 @@ const BoardView = ({ boardName, createdAt, tasks, handleSubmit }) => {
           tasks={tasks?.done}
           status="done"
           handleSubmit={handleSubmit}
-          onRemoveTask={removeTask}
+          deleteTask={deleteTask}
+          boardName={boardName}
+          editTask={editTask}
         />
       </div>
     </div>

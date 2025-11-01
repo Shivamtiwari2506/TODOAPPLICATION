@@ -2,7 +2,7 @@ import React from "react";
 import { IconTrash, IconEdit  } from "@tabler/icons-react";
 import moment from "moment";
 
-const TaskCard = ({ task, onDelete, onEdit }) => {
+const TaskCard = ({ task, onDelete, onEdit, boardName }) => {
   return (
     <div className="bg-gray-800 p-4 rounded-xl shadow-md shadow-black hover:bg-gray-700 transition flex flex-col gap-2 border-2 border-gray-500">
       <div className="flex justify-between items-start">
@@ -11,7 +11,7 @@ const TaskCard = ({ task, onDelete, onEdit }) => {
         </h3>
         <div className=" flex items-center gap-3">
         <button
-          onClick={onEdit}
+          onClick={() =>onEdit(task)}
           className="text-red-400 hover:text-red-500 transition"
         >
           <IconEdit size={18} />
@@ -50,7 +50,7 @@ const TaskCard = ({ task, onDelete, onEdit }) => {
         </div>
         <div className="col-span-2">
           <span className="font-medium text-gray-300">Board:</span>{" "}
-          {task?.board || "Not Linked"}
+          {boardName || "Not Linked"}
         </div>
       </div>
     </div>

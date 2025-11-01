@@ -74,6 +74,30 @@ const TodoApp = () => {
     }
   };
 
+  const editTask = async (taskId, updatedFields) => {
+    try {
+      const response = await api.put(`/tasks/${taskId}`, updatedFields);
+      if (response?.data?.success) {
+        toast.success(response.data.message);
+        getAllTasks(activeBoard._id);
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Failed to edit task");
+    }
+  }
+
+  const deleteTask = async (taskId) => { 
+    try {
+      const response = await api.delete(`/tasks/${taskId}`);
+      if (response?.data?.success) {
+        toast.success(response.data.message);
+        getAllTasks(activeBoard._id);
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Failed to delete task");
+    }
+  };
+
   const handleSubmit = async (taskFields) => {
     const boardId = JSON.parse(localStorage.getItem("activeBoard"));
     if (!boardId) {
@@ -103,14 +127,14 @@ const TodoApp = () => {
     if (boardId) {
       const grouped = {
         todo: allTasks.filter(
-          (t) => t.status?.toLowerCase() === "todo"
+          (t) => t.status === "Todo"
         ),
         inprogress: allTasks.filter(
           (t) =>
-            t.status?.toLowerCase() === "inprogress"
+            t.status === "In Progress"
         ),
         done: allTasks.filter(
-          (t) => t.status?.toLowerCase() === "done"
+          (t) => t.status === "Done"
         ),
       };
       setTasks(grouped);
@@ -142,6 +166,8 @@ const TodoApp = () => {
             createdAt={activeBoard.createdAt}
             tasks={tasks}
             handleSubmit={handleSubmit}
+            editTask={editTask}
+            deleteTask={deleteTask}
           />
         ) : (
           <div className="flex items-center justify-center h-full text-gray-400">

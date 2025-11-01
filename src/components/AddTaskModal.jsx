@@ -19,7 +19,7 @@ const ErrorField = ({ message }) => (
   </p>
 );
 
-const AddTaskModal = ({ openModal, setShowModal, handleSubmit, isEditing }) => {
+const AddTaskModal = ({ openModal, setShowModal, handleSubmit,  editTask, isEditing, editingData }) => {
   const [taskFields, setTaskFields] = useState(initialState);
   const [isError, setIsError] = useState(false);
   const handleChange = (field, value) => {
@@ -47,13 +47,21 @@ const AddTaskModal = ({ openModal, setShowModal, handleSubmit, isEditing }) => {
       return;
     }
 
-    setShowModal(false);
-    handleSubmit(taskFields);
+    isEditing ? editTask(editingData?._id, taskFields) : handleSubmit(taskFields);
     setTaskFields(initialState);
+    setShowModal(false);
   };
 
   useEffect(() => {
    if(isEditing) {
+    setTaskFields({
+      title: editingData?.title || "",
+      description: editingData?.description || "",
+      status: editingData?.status || "",
+      priority: editingData?.priority || "",
+      assignedTo: editingData?.assignedTo || "",
+      dueDate: editingData?.dueDate ? editingData.dueDate.split("T")[0] : "",
+    });
    }
   }, []);
 
@@ -69,7 +77,7 @@ const AddTaskModal = ({ openModal, setShowModal, handleSubmit, isEditing }) => {
             Cancel
           </Button>
           <Button type="primary" onClick={onSubmit}>
-            Save
+           {isEditing? "Update": "Save"}
           </Button>
         </div>
       }
