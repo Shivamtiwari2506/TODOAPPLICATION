@@ -13,6 +13,8 @@ const TodoApp = () => {
     inprogress: [],
     done: [],
   });
+  const [loading, setLoading] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState("Loading boards...");
 
   const getAllTasks = async (boardId) => {
     if (!boardId) return;
@@ -28,6 +30,8 @@ const TodoApp = () => {
 
   const getAllBoards = async () => {
     try {
+      setLoading(true);
+      setLoadingMessage("Waking up server... (this may take a few seconds)");
       const response = await api.get("/boards");
   
       if (response?.data?.success === true) {
@@ -42,6 +46,9 @@ const TodoApp = () => {
       }
     } catch (error) {
       toast.error(error?.response?.data?.message || "Failed to fetch boards");
+    } finally {
+      setLoading(false);
+      setLoadingMessage("");
     }
   };
 
@@ -140,14 +147,23 @@ const TodoApp = () => {
       setTasks(grouped);
     }
   }, [allTasks]);
-
+  
+  useEffect(() => {
+    getAllTasks(activeBoard?._id);
+  }, [activeBoard])
+  
   useEffect(() => {
     getAllBoards();
   }, []);
 
-  useEffect(() => {
-    getAllTasks(activeBoard?._id);
-  }, [activeBoard])
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen bg-gray-900 text-gray-300">
+        <div className="animate-spin h-10 w-10 border-4 border-blue-500 border-t-transparent rounded-full mb-4"></div>
+        <p>{loadingMessage}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-screen bg-gray-900 text-white">
