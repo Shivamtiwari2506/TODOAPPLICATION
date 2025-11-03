@@ -31,7 +31,7 @@ const TaskCard = ({ task, onDelete, onEdit, boardName }) => {
 
       <div className="grid grid-cols-2 gap-2 mt-2 text-sm text-gray-400">
         <div>
-          <span className="font-medium text-gray-300">Status:</span>{" "}
+          <span className="font-medium text-gray-300 text-wrap">Status:</span>{" "}
           {task?.status || "Not Set"}
         </div>
         <div>
